@@ -7,6 +7,6 @@ in vec4 Color;
 uniform float _Time;
 
 void main(){
-	float t = abs(sin(_Time));
+	float t = (sin(_Time * 6) + 1) / 2;
 	FragColor = Color * t;
 }
