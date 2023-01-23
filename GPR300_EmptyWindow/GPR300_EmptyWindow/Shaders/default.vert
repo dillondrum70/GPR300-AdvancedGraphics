@@ -6,6 +6,7 @@ layout(location = 1) in vec4 vColor;
 out vec4 Color;
 
 uniform float _Time;
+uniform vec3 _Offset;
 
 void main(){
 	Color = vColor;
@@ -16,8 +17,9 @@ void main(){
 	{
 		y = sin(_Time) * vPos.y;
 	}
-	else{
+	else
+	{
 		y = cos(_Time) * vPos.y;
 	}
-	gl_Position = vec4(vPos.x, y, vPos.z, 1.0);
+	gl_Position = vec4(vPos.x + _Offset.x, y + _Offset.y, vPos.z + _Offset.z, 1.0);
 }

@@ -176,6 +176,10 @@ int main() {
 		GLint  timeLocation = glGetUniformLocation(shaderProgram, "_Time");
 		glUniform1f(timeLocation, time);
 		
+		Vec3 offset = Vec3(std::cos(time) / 2, std::sin(time) / 2, 0.0f);
+		GLint  offsetLocation = glGetUniformLocation(shaderProgram, "_Offset");
+		glUniform3f(offsetLocation, offset.x, offset.y, offset.z);
+		
 		//TODO: Draw triangle (3 indices!)
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
