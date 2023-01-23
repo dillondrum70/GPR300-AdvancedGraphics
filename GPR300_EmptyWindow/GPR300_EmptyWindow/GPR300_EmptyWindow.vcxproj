@@ -136,6 +136,11 @@
     <None Include="Shaders\default.frag" />
     <None Include="Shaders\default.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sources\Color.h" />
+    <ClInclude Include="Sources\Vec3.h" />
+    <ClInclude Include="Sources\Vertex.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

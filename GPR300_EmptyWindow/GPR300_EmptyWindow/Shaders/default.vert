@@ -9,5 +9,15 @@ uniform float _Time;
 
 void main(){
 	Color = vColor;
-	gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
+
+	float y = 0;
+
+	if(vPos.x > 0)
+	{
+		y = sin(_Time) * vPos.y;
+	}
+	else{
+		y = cos(_Time) * vPos.y;
+	}
+	gl_Position = vec4(vPos.x, y, vPos.z, 1.0);
 }

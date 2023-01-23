@@ -23,4 +23,15 @@
     <None Include="Shaders\default.vert" />
     <None Include="Shaders\default.frag" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sources\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Vec3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Color.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

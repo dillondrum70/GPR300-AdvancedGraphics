@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 
+#include "Vertex.h"
+
 //void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void resizeFrameBufferCallback(GLFWwindow* window, int width, int height);
 
@@ -34,7 +36,7 @@ const char* fragmentShaderSource =
 "}										\0";*/
 
 //TODO: Vertex data array
-const float vertexData[] = {
+/*const float vertexData[] = {
 	//x		y	 z	  r    g    b    a
 	-0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0,	//Bottom Left
 	 0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0,	//Bottom Right
@@ -42,6 +44,16 @@ const float vertexData[] = {
 	 -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 1.0,	//Bottom Left
 	 0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0,		//Top Right
 	-0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 1.0		//Top Left
+};*/
+
+const Vertex vertexData[] = {
+	//x		y	 z	  r    g    b    a
+	Vertex{Vec3(-0.5, -0.5, 0.0), Color(1.0, 0.0, 0.0, 1.0)},	//Bottom Left
+	Vertex{Vec3(0.5, -0.5, 0.0), Color(0.0, 1.0, 0.0, 1.0)},	//Bottom Right
+	Vertex{Vec3(0.5,  0.5, 0.0), Color(0.0, 0.0, 1.0, 1.0)},	//Top Right
+	Vertex{Vec3(-0.5, -0.5, 0.0), Color(1.0, 0.0, 0.0, 1.0)},	//Bottom Left
+	Vertex{Vec3(0.5,  0.5, 0.0), Color(0.0, 0.0, 1.0, 1.0)},	//Top Right
+	Vertex{Vec3(-0.5, 0.5, 0.0), Color(0.0, 1.0, 0.0, 1.0)}	//Top Left	
 };
 
 const std::string VERTEX_SHADER_FILEPATH = "./Shaders/default.vert";
@@ -65,10 +77,13 @@ int main() {
 	
 	//TODO: Create and compile vertex shader
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+	//Read in contents of vertex shader file
 	std::string contents;
 	ReadShader(VERTEX_SHADER_FILEPATH, contents);
 	const char* vertexShaderSource = contents.c_str();
 	printf("Vertex Shader: \n\n %s \n", vertexShaderSource);
+
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
@@ -85,10 +100,13 @@ int main() {
 	
 	//TODO: Create and compile fragment shader
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	//Read in contents of fragment shader file
 	contents = "";
 	ReadShader(FRAGMENT_SHADER_FILEPATH, contents);
 	const char* fragmentShaderSource = contents.c_str();
 	printf("Fragment Shader: \n\n %s \n", fragmentShaderSource);
+
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
@@ -139,11 +157,11 @@ int main() {
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
 
 	//TODO: Define vertex attribute layout
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (const void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)0);
 	glEnableVertexAttribArray(0); //enable this vertex attribute
 
 	//Color (4 floats, rgba)
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(float) * 7, (const void*)(sizeof(float)*3));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(sizeof(Vec3)));
 	glEnableVertexAttribArray(1); //enable this vertex attribute
 
 	while (!glfwWindowShouldClose(window)) {
