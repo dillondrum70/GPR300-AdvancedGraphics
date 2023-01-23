@@ -2,19 +2,24 @@
 #include "GLFW/glfw3.h"
 
 #include <stdio.h>
+#include <string>
+#include <fstream>
 
 //void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void resizeFrameBufferCallback(GLFWwindow* window, int width, int height);
 
+void ReadShader(std::string filename, std::string& contents);
+
 //TODO: Vertex shader source code
-const char* vertexShaderSource =
+/*const char* vertexShaderSource =
 "#version 450							\n"
 "layout(location = 0) in vec3 vPos;		\n"
 "layout(location = 1) in vec4 vColor;	\n"
 "out vec4 Color;						\n"
+"uniform float _Time;					\n"
 "void main(){							\n"
 "	Color = vColor;						\n"
-"	gl_Position = vec4(vPos,1.0);		\n"
+"	gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);		\n"
 "}										\0";
 
 //TODO: Fragment shader source code
@@ -26,7 +31,7 @@ const char* fragmentShaderSource =
 "void main(){							\n"
 "	float t = abs(sin(_Time));			\n"
 "	FragColor = Color * t;				\n"
-"}										\0";
+"}										\0";*/
 
 //TODO: Vertex data array
 const float vertexData[] = {
@@ -38,6 +43,9 @@ const float vertexData[] = {
 	 0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0,		//Top Right
 	-0.5, 0.5, 0.0, 0.0, 1.0, 0.0, 1.0		//Top Left
 };
+
+const std::string VERTEX_SHADER_FILEPATH = "./Shaders/default.vert";
+const std::string FRAGMENT_SHADER_FILEPATH = "./Shaders/default.frag";
 
 int main() {
 	if (!glfwInit()) {
@@ -54,10 +62,13 @@ int main() {
 	}
 
 	glfwSetFramebufferSizeCallback(window, resizeFrameBufferCallback);
-
-
+	
 	//TODO: Create and compile vertex shader
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	std::string contents;
+	ReadShader(VERTEX_SHADER_FILEPATH, contents);
+	const char* vertexShaderSource = contents.c_str();
+	printf("Vertex Shader: \n\n %s \n", vertexShaderSource);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
@@ -74,6 +85,10 @@ int main() {
 	
 	//TODO: Create and compile fragment shader
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	contents = "";
+	ReadShader(FRAGMENT_SHADER_FILEPATH, contents);
+	const char* fragmentShaderSource = contents.c_str();
+	printf("Fragment Shader: \n\n %s \n", fragmentShaderSource);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
@@ -157,5 +172,27 @@ int main() {
 void resizeFrameBufferCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+}
+
+void ReadShader(std::string filename, std::string& contents)
+{
+	std::ifstream fin;
+	fin.open(filename);
+
+	if (fin.fail())
+	{
+		contents = "Shader failed to open\n\0";
+		return;
+	}
+
+	std::string currentLine = "";
+	while (std::getline(fin, currentLine))
+	{
+		contents.append(currentLine + "\n");
+	}
+
+	contents.append("\0");
+
+	fin.close();
 }
 
